@@ -1,0 +1,6 @@
+neuron_name: mining_pool
+wallet_name: mining_pool_wallet
+wallet_hotkey: mining_pool_hotkey
+reward_interval: 3600
+total_reward: 1000
+log_level: INFO
