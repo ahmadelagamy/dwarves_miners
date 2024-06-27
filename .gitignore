@@ -1,2 +1,6 @@
 /dwarves/
-/.gitignore/
+/.gitignore
+/.env
+/logs/
+/_pycache_/
+```

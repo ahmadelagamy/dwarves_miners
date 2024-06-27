@@ -8,7 +8,6 @@ import bittensor as bt
 from pool_manager import PoolManager
 from config import load_config
 
-# Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,6 +21,7 @@ logger = logging.getLogger(__name__)
 class MiningPoolApp:
     def __init__(self):
         self.config = load_config()
+        logger.info(f"Loaded configuration: {self.config}")
         self.pool_manager = PoolManager(self.config)
         self.shutdown_event = asyncio.Event()
 
@@ -66,6 +66,9 @@ async def main() -> NoReturn:
 if __name__ == "__main__":
     try:
         asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("Received keyboard interrupt. Shutting down...")
     except Exception as e:
         logger.critical(f"Fatal error: {e}")
-        sys.exit(1)
+    finally:
+        sys.exit(0)

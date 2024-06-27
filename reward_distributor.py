@@ -1,18 +1,14 @@
 import logging
 from typing import Dict, Any
-import asyncio
-import bittensor as bt
 
 logger = logging.getLogger(__name__)
 
 class RewardDistributor:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.total_reward = config.get('total_reward', 1000)
-        self.reward_interval = config.get('reward_interval', 3600)  # Default to 1 hour
+        self.total_reward = config['total_reward']
+        self.reward_interval = config['reward_interval']
         self.min_payout = config.get('min_payout', 0.1)  # Minimum payout threshold
-        self.wallet = bt.wallet(config=config['bittensor'])
-        self.subtensor = bt.subtensor(config=config['bittensor'])
 
     async def distribute(self, miner_performances: Dict[str, float]):
         """Calculate and distribute rewards to miners."""
@@ -41,37 +37,9 @@ class RewardDistributor:
 
     async def _send_rewards(self, rewards: Dict[str, float]):
         """Send rewards to miners using Bittensor's transfer mechanism."""
+        # Implement the actual reward distribution logic here
         for miner_hotkey, reward in rewards.items():
-            try:
-                # Convert reward to RAO (Bittensor's smallest unit)
-                reward_rao = int(reward * 1e9)
-                
-                # Perform the transfer
-                success = await self.subtensor.transfer(
-                    wallet=self.wallet,
-                    dest=miner_hotkey,
-                    amount=reward_rao,
-                    wait_for_inclusion=True,
-                    prompt=False
-                )
-
-                if success:
-                    logger.info(f"Successfully sent {reward} TAO to miner {miner_hotkey}")
-                else:
-                    logger.error(f"Failed to send {reward} TAO to miner {miner_hotkey}")
-
-            except Exception as e:
-                logger.error(f"Error sending reward to miner {miner_hotkey}: {e}")
-
-    async def run(self, get_miner_performances):
-        """Run the reward distribution loop."""
-        while True:
-            await asyncio.sleep(self.reward_interval)
-            try:
-                miner_performances = await get_miner_performances()
-                await self.distribute(miner_performances)
-            except Exception as e:
-                logger.error(f"Error in reward distribution cycle: {e}")
+            logger.info(f"Would send {reward} TAO to miner {miner_hotkey}")
 
     def update_total_reward(self, new_total_reward: float):
         """Update the total reward amount."""

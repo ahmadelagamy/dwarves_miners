@@ -1,36 +1,54 @@
-import asyncio
-import logging
-from typing import Dict, Any
-
 import bittensor as bt
 from miner_manager import MinerManager
 from work_evaluator import WorkEvaluator
 from reward_distributor import RewardDistributor
+import asyncio
+import logging
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
+
 class PoolManager:
-    def __init__(self, config: Dict[str, Any]):
+    """Manages the mining pool and its components.
+
+    The PoolManager class is responsible for starting and stopping the mining pool,
+    setting up the axon server, registering the mining pool neuron on the Bittensor network,
+    and distributing rewards to miners.
+
+    Attributes:
+        config (dict): The configuration settings for the mining pool.
+        bt_config (dict): The Bittensor configuration settings.
+        wallet (bt.wallet): The Bittensor wallet used for registration and reward distribution.
+        subtensor (subtensor.Subtensor): The Bittensor Subtensor instance for interacting with the network.
+        miner_manager (MinerManager): The manager for handling miner registration and performance tracking.
+        work_evaluator (WorkEvaluator): The evaluator for processing work submissions from miners.
+        reward_distributor (RewardDistributor): The distributor for distributing rewards to miners.
+        axon (bt.axon): The axon server for handling incoming requests.
+        is_running (bool): Flag indicating whether the pool manager is running.
+        reward_interval (int): The interval (in seconds) for distributing rewards to miners.
+
+    """
+
+    def __init__(self, config):
         self.config = config
         self.bt_config = config['bittensor']
         self.wallet = bt.wallet(config=self.bt_config)
-        self.subtensor = bt.subtensor(config=self.bt_config)
+        self.subtensor = config['subtensor']
         self.miner_manager = MinerManager()
         self.work_evaluator = WorkEvaluator(config)
-        self.reward_distributor = RewardDistributor(config['total_reward'])
+        self.reward_distributor = RewardDistributor(config)
         self.axon = None
         self.is_running = False
         self.reward_interval = config['reward_interval']
-        self.reward_distributor = RewardDistributor(config)
 
     async def start(self):
         """Start the pool manager and its components."""
         logger.info("Starting Pool Manager...")
         try:
-            await self._setup_axon()
+            self._setup_axon()
             await self._register_neuron()
             self.is_running = True
-            asyncio.create_task(self.reward_distributor.run(self.miner_manager.get_miner_performances))
             asyncio.create_task(self._reward_loop())
             logger.info("Pool Manager started successfully.")
         except Exception as e:
@@ -42,10 +60,10 @@ class PoolManager:
         logger.info("Stopping Pool Manager...")
         self.is_running = False
         if self.axon:
-            await self.axon.stop()
+            self.axon.stop()
         logger.info("Pool Manager stopped.")
 
-    async def _setup_axon(self):
+    def _setup_axon(self):
         """Set up the axon server."""
         self.axon = bt.axon(wallet=self.wallet)
         self.axon.attach(
@@ -58,20 +76,29 @@ class PoolManager:
             blacklist_fn=self.blacklist_check,
             priority_fn=self.prioritize
         )
-        await self.axon.start()
+        self.axon.start()
         logger.info(f"Axon server started on port {self.axon.port}")
 
     async def _register_neuron(self):
         """Register the mining pool neuron on the Bittensor network."""
-        if not self.subtensor.is_registered(self.wallet.hotkey.ss58_address):
+        neuron = self.subtensor.get_neuron_for_pubkey_and_subnet(
+            self.wallet.hotkey.ss58_address, 
+            self.config.get('netuid', 1)  # Use the appropriate netuid
+        )
+        if neuron is None:
             logger.info("Registering mining pool neuron...")
-            success = await self.subtensor.register(wallet=self.wallet, prompt=False)
+            success = await self.subtensor.register(
+                wallet=self.wallet,
+                prompt=False,
+                netuid=self.config.get('netuid', 1)  # Use the appropriate netuid
+            )
             if success:
                 logger.info(f"Mining pool neuron registered with hotkey: {self.wallet.hotkey.ss58_address}")
             else:
                 raise Exception("Failed to register mining pool neuron")
         else:
             logger.info(f"Mining pool neuron already registered with hotkey: {self.wallet.hotkey.ss58_address}")
+
 
     async def _reward_loop(self):
         """Periodically distribute rewards to miners."""
@@ -99,22 +126,20 @@ class PoolManager:
         """Handle work submissions from miners."""
         try:
             miner_hotkey = synapse.dendrite.hotkey
-            model_state_dict = synapse.work
-            loss = await self.work_evaluator.evaluate_with_timeout(model_state_dict)
+            work = synapse.work
+            loss = await self.work_evaluator.evaluate(work)
             await self.miner_manager.update_miner_performance(miner_hotkey, loss)
             synapse.loss = loss
             logger.info(f"Work submission processed for {miner_hotkey} with loss {loss}")
-        except asyncio.TimeoutError:
-            logger.warning(f"Work submission evaluation timed out for {synapse.dendrite.hotkey}")
-            synapse.loss = None
         except Exception as e:
             logger.error(f"Error handling work submission for {synapse.dendrite.hotkey}: {e}")
             synapse.loss = None
         return synapse
-    def blacklist_check(self, synapse: bt.Synapse) -> bool:
+
+    def blacklist_check(self, synapse: bt.Synapse) -> Tuple[bool, str]:
         """Check if a request should be blacklisted."""
         # Implement your blacklist logic here
-        return False
+        return False, "Not blacklisted"
 
     def prioritize(self, synapse: bt.Synapse) -> float:
         """Prioritize incoming requests."""

@@ -2,5 +2,8 @@ neuron_name: mining_pool
 wallet_name: mining_pool_wallet
 wallet_hotkey: mining_pool_hotkey
 reward_interval: 3600
-total_reward: 1000
+total_reward: 10
 log_level: INFO
+network: test
+chain_endpoint: wss://test.finney.opentensor.ai:443
+netuid: 9  # Add this line, use the appropriate netuid for your subnet
