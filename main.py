@@ -8,6 +8,7 @@ import bittensor as bt
 from pool_manager import PoolManager
 from config import load_config
 
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',

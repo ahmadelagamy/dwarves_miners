@@ -36,7 +36,7 @@ def load_config() -> Dict[str, Any]:
         bt_config.wallet.hotkey = config.get('wallet_hotkey', 'mining_pool_hotkey')
         bt_config.subtensor.network = config.get('network', 'test')
         bt_config.subtensor.chain_endpoint = config.get('chain_endpoint', 'wss://test.finney.opentensor.ai:443')
-
+        bt_config.subtensor.netuid= 100
         config['bittensor'] = bt_config
         logger.info("Bittensor configuration initialized successfully")
 
