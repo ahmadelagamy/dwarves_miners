@@ -6,3 +6,19 @@
 2024-06-29 23:22:17,202 - __main__ - INFO - Loaded configuration: {'neuron_name': 'mining_pool', 'wallet_name': 'mining_pool_wallet', 'wallet_hotkey': 'mining_pool_hotkey', 'reward_interval': 3600, 'total_reward': 10, 'log_level': 'INFO', 'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100, 'bittensor': Munch({'neuron': Munch({'name': 'mining_pool'}), 'wallet': Munch({'name': 'mining_pool_wallet', 'hotkey': 'mining_pool_hotkey'}), 'subtensor': Munch({'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100})}), 'subtensor': subtensor(test, wss://test.finney.opentensor.ai:443/)}
 2024-06-29 23:22:18,086 - bittensor - INFO -  - Connected to test network and wss://test.finney.opentensor.ai:443/. - 
 2024-06-29 23:22:18,087 - __main__ - CRITICAL - Fatal error: netuid
+2024-07-03 19:17:16,905 - config - INFO - Attempting to load config from: config.yaml
+2024-07-03 19:17:16,910 - config - INFO - Loaded config from YAML: {'neuron_name': 'mining_pool', 'wallet_name': 'mining_pool_wallet', 'wallet_hotkey': 'mining_pool_hotkey', 'reward_interval': 3600, 'total_reward': 10, 'log_level': 'INFO', 'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100}
+2024-07-03 19:17:16,910 - config - INFO - Initializing Bittensor configuration
+2024-07-03 19:17:16,910 - config - INFO - Bittensor configuration initialized successfully
+2024-07-03 19:17:18,325 - bittensor - INFO -  - Connected to test network and wss://test.finney.opentensor.ai:443/. - 
+2024-07-03 19:17:18,327 - __main__ - INFO - Loaded configuration: {'neuron_name': 'mining_pool', 'wallet_name': 'mining_pool_wallet', 'wallet_hotkey': 'mining_pool_hotkey', 'reward_interval': 3600, 'total_reward': 10, 'log_level': 'INFO', 'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100, 'bittensor': Munch({'neuron': Munch({'name': 'mining_pool'}), 'wallet': Munch({'name': 'mining_pool_wallet', 'hotkey': 'mining_pool_hotkey'}), 'subtensor': Munch({'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100})}), 'subtensor': subtensor(test, wss://test.finney.opentensor.ai:443/)}
+2024-07-03 19:17:19,336 - bittensor - INFO -  - Connected to test network and wss://test.finney.opentensor.ai:443/. - 
+2024-07-03 19:17:19,336 - __main__ - CRITICAL - Fatal error: netuid
+2024-07-03 19:38:30,052 - config - INFO - Attempting to load config from: config.yaml
+2024-07-03 19:38:30,056 - config - INFO - Loaded config from YAML: {'neuron_name': 'mining_pool', 'wallet_name': 'mining_pool_wallet', 'wallet_hotkey': 'mining_pool_hotkey', 'reward_interval': 3600, 'total_reward': 10, 'log_level': 'INFO', 'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 1}
+2024-07-03 19:38:30,056 - config - INFO - Initializing Bittensor configuration
+2024-07-03 19:38:30,057 - config - INFO - Bittensor configuration initialized successfully
+2024-07-03 19:38:31,905 - bittensor - INFO -  - Connected to test network and wss://test.finney.opentensor.ai:443/. - 
+2024-07-03 19:38:31,907 - __main__ - INFO - Loaded configuration: {'neuron_name': 'mining_pool', 'wallet_name': 'mining_pool_wallet', 'wallet_hotkey': 'mining_pool_hotkey', 'reward_interval': 3600, 'total_reward': 10, 'log_level': 'INFO', 'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 1, 'bittensor': Munch({'neuron': Munch({'name': 'mining_pool'}), 'wallet': Munch({'name': 'mining_pool_wallet', 'hotkey': 'mining_pool_hotkey'}), 'subtensor': Munch({'network': 'test', 'chain_endpoint': 'wss://test.finney.opentensor.ai:443', 'netuid': 100})}), 'subtensor': subtensor(test, wss://test.finney.opentensor.ai:443/)}
+2024-07-03 19:38:32,933 - bittensor - INFO -  - Connected to test network and wss://test.finney.opentensor.ai:443/. - 
+2024-07-03 19:38:32,934 - __main__ - CRITICAL - Fatal error: netuid

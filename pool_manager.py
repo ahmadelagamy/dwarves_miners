@@ -1,5 +1,5 @@
 import bittensor as bt
-from miner_manager import MinerManager
+from test.miner_manager import MinerManager
 from work_evaluator import WorkEvaluator
 from reward_distributor import RewardDistributor
 import asyncio

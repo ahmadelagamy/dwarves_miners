@@ -6,5 +6,4 @@ total_reward: 10
 log_level: INFO
 network: test
 chain_endpoint: wss://test.finney.opentensor.ai:443
-netuid: 100
-  # Add this line, use the appropriate netuid for your subnet
+netuid: 100 # Add this line, use the appropriate netuid for your subnet
